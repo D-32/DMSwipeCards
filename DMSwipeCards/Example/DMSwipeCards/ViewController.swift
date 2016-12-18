@@ -11,6 +11,9 @@ import DMSwipeCards
 
 class ViewController: UIViewController {
 
+	private var swipeView: DMSwipeCardsView<String>!
+	private var count = 0
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -56,14 +59,31 @@ class ViewController: UIViewController {
 		}
 
 		let frame = CGRect(x: 0, y: 80, width: self.view.frame.width, height: self.view.frame.height - 160)
-		let swipeView = DMSwipeCardsView<String>(frame: frame,
+		swipeView = DMSwipeCardsView<String>(frame: frame,
 		                                         viewGenerator: viewGenerator,
 		                                         overlayGenerator: overlayGenerator)
-		swipeView.addCards((1...4).map({"\($0)"}), onTop: false)
 		self.view.addSubview(swipeView)
 
-		
+
+
+		let button = UIButton(frame: CGRect(x: 0, y: 40, width: self.view.frame.width, height: 40))
+		button.setTitle("Load cards", for: .normal)
+		button.setTitleColor(UIColor.blue, for: .normal)
+		button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+		self.view.addSubview(button)
     }
 
+	func buttonTapped() {
+		let ac = UIAlertController(title: "Load on top / on bottom?", message: nil, preferredStyle: .actionSheet)
+		ac.addAction(UIAlertAction(title: "On Top", style: .default, handler: { (a: UIAlertAction) in
+			self.swipeView.addCards((self.count...(self.count+3)).map({"\($0)"}), onTop: true)
+			self.count = self.count + 4
+		}))
+		ac.addAction(UIAlertAction(title: "On Bottom", style: .default, handler: { (a: UIAlertAction) in
+			self.swipeView.addCards((self.count...(self.count+3)).map({"\($0)"}), onTop: false)
+			self.count = self.count + 4
+		}))
+		self.present(ac, animated: true, completion: nil)
+	}
 }
 
