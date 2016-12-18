@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'DMSwipeCards_Example' do
+  pod 'DMSwipeCards', :path => '../'
+
+  target 'DMSwipeCards_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
