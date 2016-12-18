@@ -69,7 +69,6 @@ class DMSwipeCard: UIView {
 	}
 
 	private func afterSwipeAction() {
-		print("afterSwipeAction")
 		if xFromCenter > actionMargin {
 			self.rightAction()
 		} else if xFromCenter < -actionMargin {
