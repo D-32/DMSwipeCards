@@ -9,7 +9,12 @@
 import Foundation
 import UIKit
 
-protocol DMSwipeCardsViewDelegate: class {
+public enum SwipeMode {
+	case left
+	case right
+}
+
+public protocol DMSwipeCardsViewDelegate: class {
 	func swipedLeft(_ object: Any)
 	func swipedRight(_ object: Any)
 	func reachedEndOfStack()
@@ -21,16 +26,21 @@ public class DMSwipeCardsView<Element>: UIView {
 	var bufferSize: Int = 2
 
 	fileprivate let viewGenerator: ViewGenerator
+	fileprivate let overlayGenerator: OverlayGenerator?
 	fileprivate var allCards = [Element]()
 	fileprivate var loadedCards = [DMSwipeCard]()
 
 	public typealias ViewGenerator = (_ element: Element, _ frame: CGRect) -> (UIView)
-	public init(frame: CGRect, viewGenerator: @escaping ViewGenerator) {
+	public typealias OverlayGenerator = (_ mode: SwipeMode, _ frame: CGRect) -> (UIView?)
+	public init(frame: CGRect,
+	            viewGenerator: @escaping ViewGenerator,
+	            overlayGenerator: OverlayGenerator? = nil) {
+		self.overlayGenerator = overlayGenerator
 		self.viewGenerator = viewGenerator
 		super.init(frame: frame)
 	}
 
-	override public init(frame: CGRect) {
+	override private init(frame: CGRect) {
 		fatalError("Please use init(frame:,viewGenerator)")
 	}
 	
@@ -116,6 +126,9 @@ extension DMSwipeCardsView {
 		cardView.obj = element
 		let sv = self.viewGenerator(element, cardView.bounds)
 		cardView.addSubview(sv)
+		cardView.leftOverlay = self.overlayGenerator?(.left, cardView.bounds)
+		cardView.rightOverlay = self.overlayGenerator?(.right, cardView.bounds)
+		cardView.configureOverlays()
 		return cardView
 	}
 }

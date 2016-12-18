@@ -18,6 +18,8 @@ class DMSwipeCard: UIView {
 
 	weak var delegate: DMSwipeCardDelegate?
 	var obj: Any!
+	var leftOverlay: UIView?
+	var rightOverlay: UIView?
 
 	private let actionMargin: CGFloat = 120.0
 	private let rotationStrength: CGFloat = 320.0
@@ -42,6 +44,18 @@ class DMSwipeCard: UIView {
 		fatalError("init(coder:) has not been implemented")
 	}
 
+	func configureOverlays() {
+		self.configureOverlay(overlay: self.leftOverlay)
+		self.configureOverlay(overlay: self.rightOverlay)
+	}
+
+	private func configureOverlay(overlay: UIView?) {
+		if let o = overlay {
+			self.addSubview(o)
+			o.alpha = 0.0
+		}
+	}
+
 	func dragEvent(gesture: UIPanGestureRecognizer) {
 		xFromCenter = gesture.translation(in: self).x
 		yFromCenter = gesture.translation(in: self).y
@@ -58,7 +72,7 @@ class DMSwipeCard: UIView {
 			let transform = CGAffineTransform(rotationAngle: rAngle)
 			let scaleTransform = transform.scaledBy(x: scale, y: scale)
 			self.transform = scaleTransform
-			//self.updateOverlay(xFromCenter)
+			self.updateOverlay(xFromCenter)
 			break
 		case .ended:
 			self.afterSwipeAction()
@@ -77,9 +91,23 @@ class DMSwipeCard: UIView {
 			UIView.animate(withDuration: 0.3) {
 				self.center = self.originalPoint
 				self.transform = CGAffineTransform.identity
-
+				self.leftOverlay?.alpha = 0.0
+				self.rightOverlay?.alpha = 0.0
 			}
 		}
+	}
+
+	private func updateOverlay(_ distance: CGFloat) {
+		var activeOverlay: UIView?
+		if (distance > 0) {
+			self.leftOverlay?.alpha = 0.0
+			activeOverlay = self.rightOverlay
+		} else {
+			self.rightOverlay?.alpha = 0.0
+			activeOverlay = self.leftOverlay
+		}
+
+		activeOverlay?.alpha = min(fabs(distance)/100, 1.0)
 	}
 
 	private func rightAction() {
