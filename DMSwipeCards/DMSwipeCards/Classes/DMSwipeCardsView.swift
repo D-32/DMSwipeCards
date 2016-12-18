@@ -10,7 +10,9 @@ import Foundation
 import UIKit
 
 protocol DMSwipeCardsViewDelegate: class {
-
+	func swipedLeft(_ object: Any)
+	func swipedRight(_ object: Any)
+	func reachedEndOfStack()
 }
 
 public class DMSwipeCardsView<Element>: UIView {
@@ -18,9 +20,9 @@ public class DMSwipeCardsView<Element>: UIView {
 	weak var delegate: DMSwipeCardsViewDelegate?
 	var bufferSize: Int = 2
 
-	private let viewGenerator: ViewGenerator
-	private var allCards = [Element]()
-	private var loadedCards = [DMSwipeCard]()
+	fileprivate let viewGenerator: ViewGenerator
+	fileprivate var allCards = [Element]()
+	fileprivate var loadedCards = [DMSwipeCard]()
 
 	public typealias ViewGenerator = (_ element: Element, _ frame: CGRect) -> (UIView)
 	public init(frame: CGRect, viewGenerator: @escaping ViewGenerator) {
@@ -48,11 +50,8 @@ public class DMSwipeCardsView<Element>: UIView {
 		}
 
 		for element in elements {
-			allCards.append(element)
 			if loadedCards.count < bufferSize {
-				let cardView = DMSwipeCard(frame: self.bounds)
-				let sv = self.viewGenerator(element, cardView.bounds)
-				cardView.addSubview(sv)
+				let cardView = self.createCardView(element: element)
 				if loadedCards.isEmpty {
 					self.addSubview(cardView)
 				} else {
@@ -61,5 +60,62 @@ public class DMSwipeCardsView<Element>: UIView {
 				self.loadedCards.append(cardView)
 			}
 		}
+	}
+
+	func swipeTopCardRight() {
+		// TODO: not yet supported
+		fatalError("Not yet supported")
+	}
+
+	func swipeTopCardLeft() {
+		// TODO: not yet supported
+		fatalError("Not yet supported")
+	}
+}
+
+extension DMSwipeCardsView: DMSwipeCardDelegate {
+	func cardSwipedLeft(_ card: DMSwipeCard) {
+		self.handleSwipedCard(card)
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.001) {
+			self.delegate?.swipedLeft(card.obj)
+			self.loadNextCard()
+		}
+	}
+
+	func cardSwipedRight(_ card: DMSwipeCard) {
+		self.handleSwipedCard(card)
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.001) {
+			self.delegate?.swipedRight(card.obj)
+			self.loadNextCard()
+		}
+	}
+}
+
+extension DMSwipeCardsView {
+	fileprivate func handleSwipedCard(_ card: DMSwipeCard) {
+		self.loadedCards.removeFirst()
+		self.allCards.removeFirst()
+		if self.allCards.isEmpty {
+			self.delegate?.reachedEndOfStack()
+		}
+	}
+
+	fileprivate func loadNextCard() {
+		if self.allCards.count - self.loadedCards.count > 0 {
+			let next = self.allCards[loadedCards.count]
+			let nextView = self.createCardView(element: next)
+			let below = self.loadedCards.last!
+			self.loadedCards.append(nextView)
+			self.insertSubview(nextView, belowSubview: below)
+		}
+	}
+
+	fileprivate func createCardView(element: Element) -> DMSwipeCard {
+		let cardView = DMSwipeCard(frame: self.bounds)
+		cardView.delegate = self
+		cardView.obj = element
+		let sv = self.viewGenerator(element, cardView.bounds)
+		cardView.addSubview(sv)
+		return cardView
 	}
 }

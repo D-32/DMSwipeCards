@@ -17,6 +17,7 @@ protocol DMSwipeCardDelegate: class {
 class DMSwipeCard: UIView {
 
 	weak var delegate: DMSwipeCardDelegate?
+	var obj: Any!
 
 	private let actionMargin: CGFloat = 120.0
 	private let rotationStrength: CGFloat = 320.0
@@ -68,6 +69,7 @@ class DMSwipeCard: UIView {
 	}
 
 	private func afterSwipeAction() {
+		print("afterSwipeAction")
 		if xFromCenter > actionMargin {
 			self.rightAction()
 		} else if xFromCenter < -actionMargin {
