@@ -59,6 +59,13 @@ public class DMSwipeCardsView<Element>: UIView {
 			}
 		}
 
+		if onTop && loadedCards.count > 0 {
+			for cv in loadedCards {
+				cv.removeFromSuperview()
+			}
+			loadedCards.removeAll()
+		}
+
 		for element in elements {
 			if loadedCards.count < bufferSize {
 				let cardView = self.createCardView(element: element)
