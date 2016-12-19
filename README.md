@@ -2,7 +2,7 @@
 ![License](https://img.shields.io/cocoapods/l/DMSwipeCards.svg?style=flat)
 [![twitter: @dylan36032](http://img.shields.io/badge/twitter-%40dylan36032-blue.svg?style=flat)](https://twitter.com/dylan36032)
 
-![image](screenshot.png)
+![image](screenshot_1482145004.png)
 
 ## Features
 
