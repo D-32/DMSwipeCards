@@ -45,7 +45,7 @@ class ViewController: UIViewController {
 			return container
 		}
 
-		let overlayGenerator: (SwipeMode, CGRect) -> (UIView?) = { (mode: SwipeMode, frame: CGRect) -> (UIView) in
+		let overlayGenerator: (SwipeMode, CGRect) -> (UIView) = { (mode: SwipeMode, frame: CGRect) -> (UIView) in
 			let label = UILabel()
 			label.frame.size = CGSize(width: 100, height: 100)
 			label.center = CGPoint(x: frame.width / 2, y: frame.height / 2)

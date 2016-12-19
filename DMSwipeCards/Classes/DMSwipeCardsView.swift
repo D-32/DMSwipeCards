@@ -31,7 +31,7 @@ public class DMSwipeCardsView<Element>: UIView {
 	fileprivate var loadedCards = [DMSwipeCard]()
 
 	public typealias ViewGenerator = (_ element: Element, _ frame: CGRect) -> (UIView)
-	public typealias OverlayGenerator = (_ mode: SwipeMode, _ frame: CGRect) -> (UIView?)
+	public typealias OverlayGenerator = (_ mode: SwipeMode, _ frame: CGRect) -> (UIView)
 	public init(frame: CGRect,
 	            viewGenerator: @escaping ViewGenerator,
 	            overlayGenerator: OverlayGenerator? = nil) {
