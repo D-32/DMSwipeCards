@@ -60,7 +60,8 @@ The `object` parameter is guarenteed to have the type `Element`. Sadly generics 
 
 ## Example
 
-For a nice working demo sample, please take a look the [Example](https://github.com/D-32/DMSwipeCards/tree/master/Example) project.
+For a nice working demo sample, please take a look the [Example](https://github.com/D-32/DMSwipeCards/tree/master/Example) project.  
+To run the example, first run `pod install` in the `Example` directory.
 
 ## Credits
 Loosly based on [TinderSimpleSwipeCards](https://github.com/cwRichardKim/TinderSimpleSwipeCards)
