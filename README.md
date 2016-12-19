@@ -62,3 +62,6 @@ The `object` parameter is guarenteed to have the type `Element`. Sadly generics 
 
 For a nice working demo sample, please take a look the [Example](https://github.com/D-32/DMSwipeCards/tree/master/Example) project.
 
+## Credits
+Loosly based on [TinderSimpleSwipeCards](https://github.com/cwRichardKim/TinderSimpleSwipeCards)
+
