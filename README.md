@@ -53,6 +53,7 @@ To add new cards, just call the `addCards` method with an array of the previousl
 
 	func swipedLeft(_ object: Any)
 	func swipedRight(_ object: Any)
+	func cardTapped(_ object: Any)
 	func reachedEndOfStack()
 
 The `object` parameter is guarenteed to have the type `Element`. Sadly generics don't work here.  
