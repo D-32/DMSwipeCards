@@ -22,8 +22,8 @@ public protocol DMSwipeCardsViewDelegate: class {
 
 public class DMSwipeCardsView<Element>: UIView {
 
-	weak var delegate: DMSwipeCardsViewDelegate?
-	var bufferSize: Int = 2
+	public weak var delegate: DMSwipeCardsViewDelegate?
+	public var bufferSize: Int = 2
 
 	fileprivate let viewGenerator: ViewGenerator
 	fileprivate let overlayGenerator: OverlayGenerator?
