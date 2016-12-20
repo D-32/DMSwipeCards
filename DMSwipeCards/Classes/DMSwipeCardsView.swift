@@ -39,6 +39,7 @@ public class DMSwipeCardsView<Element>: UIView {
 		self.overlayGenerator = overlayGenerator
 		self.viewGenerator = viewGenerator
 		super.init(frame: frame)
+    self.isUserInteractionEnabled = false
 	}
 
 	override private init(frame: CGRect) {
@@ -50,6 +51,12 @@ public class DMSwipeCardsView<Element>: UIView {
 	}
 
 	public func addCards(_ elements: [Element], onTop: Bool = false) {
+    if elements.isEmpty {
+      return
+    }
+
+    self.isUserInteractionEnabled = true
+
 		if onTop {
 			for element in elements.reversed() {
 				allCards.insert(element, at: 0)
@@ -118,6 +125,7 @@ extension DMSwipeCardsView {
 		self.loadedCards.removeFirst()
 		self.allCards.removeFirst()
 		if self.allCards.isEmpty {
+      self.isUserInteractionEnabled = false
 			self.delegate?.reachedEndOfStack()
 		}
 	}

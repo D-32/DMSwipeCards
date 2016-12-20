@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'DMSwipeCards'
-  s.version          = '1.0.2'
+  s.version          = '1.0.3'
   s.summary          = 'Tinder like card interface'
 
   s.description      = <<-DESC
