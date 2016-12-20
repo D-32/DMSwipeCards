@@ -62,6 +62,7 @@ class ViewController: UIViewController {
 		swipeView = DMSwipeCardsView<String>(frame: frame,
 		                                         viewGenerator: viewGenerator,
 		                                         overlayGenerator: overlayGenerator)
+    swipeView.delegate = self
 		self.view.addSubview(swipeView)
 
 
@@ -85,5 +86,23 @@ class ViewController: UIViewController {
 		}))
 		self.present(ac, animated: true, completion: nil)
 	}
+}
+
+extension ViewController: DMSwipeCardsViewDelegate {
+  func swipedLeft(_ object: Any) {
+    print("Swiped left: \(object)")
+  }
+
+  func swipedRight(_ object: Any) {
+    print("Swiped right: \(object)")
+  }
+
+  func cardTapped(_ object: Any) {
+    print("Tapped on: \(object)")
+  }
+
+  func reachedEndOfStack() {
+    print("Reached end of stack")
+  }
 }
 
