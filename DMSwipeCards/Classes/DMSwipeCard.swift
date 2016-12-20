@@ -12,6 +12,7 @@ import UIKit
 protocol DMSwipeCardDelegate: class {
 	func cardSwipedLeft(_ card: DMSwipeCard)
 	func cardSwipedRight(_ card: DMSwipeCard)
+  func cardTapped(_ card: DMSwipeCard)
 }
 
 class DMSwipeCard: UIView {
@@ -38,7 +39,11 @@ class DMSwipeCard: UIView {
 		let panGesture = UIPanGestureRecognizer(target: self, action: #selector(dragEvent(gesture:)))
 		panGesture.delegate = self
 		self.addGestureRecognizer(panGesture)
-	}
+
+    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapEvent(gesture:)))
+    tapGesture.delegate = self
+    self.addGestureRecognizer(tapGesture)
+  }
 
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
@@ -81,6 +86,10 @@ class DMSwipeCard: UIView {
 			break
 		}
 	}
+
+  func tapEvent(gesture: UITapGestureRecognizer) {
+    self.delegate?.cardTapped(self)
+  }
 
 	private func afterSwipeAction() {
 		if xFromCenter > actionMargin {

@@ -17,6 +17,7 @@ public enum SwipeMode {
 public protocol DMSwipeCardsViewDelegate: class {
 	func swipedLeft(_ object: Any)
 	func swipedRight(_ object: Any)
+  func cardTapped(_ object: Any)
 	func reachedEndOfStack()
 }
 
@@ -106,6 +107,10 @@ extension DMSwipeCardsView: DMSwipeCardDelegate {
 			self.loadNextCard()
 		}
 	}
+
+  func cardTapped(_ card: DMSwipeCard) {
+    self.delegate?.cardTapped(card.obj)
+  }
 }
 
 extension DMSwipeCardsView {
