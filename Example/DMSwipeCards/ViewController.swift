@@ -30,7 +30,7 @@ class ViewController: UIViewController {
 			label.text = element
 			label.textAlignment = .center
 			label.backgroundColor = UIColor.white
-			label.font = UIFont.systemFont(ofSize: 48, weight: UIFontWeightThin)
+			label.font = UIFont.systemFont(ofSize: 48, weight: UIFont.Weight.thin)
 			label.clipsToBounds = true
 			label.layer.cornerRadius = 16
 			container.addSubview(label)
@@ -74,7 +74,7 @@ class ViewController: UIViewController {
 		self.view.addSubview(button)
     }
 
-	func buttonTapped() {
+	@objc func buttonTapped() {
 		let ac = UIAlertController(title: "Load on top / on bottom?", message: nil, preferredStyle: .actionSheet)
 		ac.addAction(UIAlertAction(title: "On Top", style: .default, handler: { (a: UIAlertAction) in
 			self.swipeView.addCards((self.count...(self.count+3)).map({"\($0)"}), onTop: true)
