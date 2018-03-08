@@ -12,7 +12,7 @@ import UIKit
 protocol DMSwipeCardDelegate: class {
 	func cardSwipedLeft(_ card: DMSwipeCard)
 	func cardSwipedRight(_ card: DMSwipeCard)
-  func cardTapped(_ card: DMSwipeCard)
+    func cardTapped(_ card: DMSwipeCard)
 }
 
 class DMSwipeCard: UIView {
@@ -24,7 +24,7 @@ class DMSwipeCard: UIView {
 
 	private let actionMargin: CGFloat = 120.0
 	private let rotationStrength: CGFloat = 320.0
-	private let rotationAngle: CGFloat = CGFloat(Double.pi) / CGFloat(8.0)
+	private let rotationAngle: CGFloat = CGFloat.pi / 8
 	private let rotationMax: CGFloat = 1
 	private let scaleStrength: CGFloat = -2
 	private let scaleMax: CGFloat = 1.02
@@ -36,14 +36,14 @@ class DMSwipeCard: UIView {
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 
-		let panGesture = UIPanGestureRecognizer(target: self, action: #selector(dragEvent(gesture:)))
-		panGesture.delegate = self
-		self.addGestureRecognizer(panGesture)
-
-    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapEvent(gesture:)))
-    tapGesture.delegate = self
-    self.addGestureRecognizer(tapGesture)
-  }
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(dragEvent(gesture:)))
+        panGesture.delegate = self
+        self.addGestureRecognizer(panGesture)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapEvent(gesture:)))
+        tapGesture.delegate = self
+        self.addGestureRecognizer(tapGesture)
+    }
 
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
@@ -53,6 +53,16 @@ class DMSwipeCard: UIView {
 		self.configureOverlay(overlay: self.leftOverlay)
 		self.configureOverlay(overlay: self.rightOverlay)
 	}
+    
+    open func remove(with mode: SwipeMode) {
+        switch mode {
+        case .left:
+            leftAction()
+            
+        case .right:
+            rightAction()
+        }
+    }
 
 	private func configureOverlay(overlay: UIView?) {
 		if let o = overlay {
@@ -61,35 +71,35 @@ class DMSwipeCard: UIView {
 		}
 	}
 
-	@objc func dragEvent(gesture: UIPanGestureRecognizer) {
+    @objc func dragEvent(gesture: UIPanGestureRecognizer) {
 		xFromCenter = gesture.translation(in: self).x
 		yFromCenter = gesture.translation(in: self).y
 
 		switch gesture.state {
-		case .began:
-			self.originalPoint = self.center
-			break
-		case .changed:
-			let rStrength = min(xFromCenter / self.rotationStrength, rotationMax)
-			let rAngle = self.rotationAngle * rStrength
-			let scale = min(1 - fabs(rStrength) / self.scaleStrength, self.scaleMax)
-			self.center = CGPoint(x: self.originalPoint.x + xFromCenter, y: self.originalPoint.y + yFromCenter)
-			let transform = CGAffineTransform(rotationAngle: rAngle)
-			let scaleTransform = transform.scaledBy(x: scale, y: scale)
-			self.transform = scaleTransform
-			self.updateOverlay(xFromCenter)
-			break
-		case .ended:
-			self.afterSwipeAction()
-			break
-		default:
-			break
-		}
-	}
-
-  @objc func tapEvent(gesture: UITapGestureRecognizer) {
-    self.delegate?.cardTapped(self)
-  }
+        case .began:
+            self.originalPoint = self.center
+            break
+        case .changed:
+            let rStrength = min(xFromCenter / self.rotationStrength, rotationMax)
+            let rAngle = self.rotationAngle * rStrength
+            let scale = min(1 - fabs(rStrength) / self.scaleStrength, self.scaleMax)
+            self.center = CGPoint(x: self.originalPoint.x + xFromCenter, y: self.originalPoint.y + yFromCenter)
+            let transform = CGAffineTransform(rotationAngle: rAngle)
+            let scaleTransform = transform.scaledBy(x: scale, y: scale)
+            self.transform = scaleTransform
+            self.updateOverlay(xFromCenter)
+            break
+        case .ended:
+            self.afterSwipeAction()
+            break
+        default:
+            break
+        }
+    }
+    
+    @objc func tapEvent(gesture: UITapGestureRecognizer) {
+        self.delegate?.cardTapped(self)
+    }
 
 	private func afterSwipeAction() {
 		if xFromCenter > actionMargin {
@@ -120,7 +130,7 @@ class DMSwipeCard: UIView {
 	}
 
 	private func rightAction() {
-		let finishPoint = CGPoint(x: 500, y: 2 * yFromCenter + self.originalPoint.y)
+		let finishPoint = CGPoint(x: removeX(), y: 2 * yFromCenter + self.originalPoint.y)
 		UIView.animate(withDuration: 0.3, animations: { 
 			self.center = finishPoint
 		}) { _ in
@@ -130,7 +140,7 @@ class DMSwipeCard: UIView {
 	}
 
 	private func leftAction() {
-		let finishPoint = CGPoint(x: -500, y: 2 * yFromCenter + self.originalPoint.y)
+		let finishPoint = CGPoint(x: -removeX(), y: 2 * yFromCenter + self.originalPoint.y)
 		UIView.animate(withDuration: 0.3, animations: {
 			self.center = finishPoint
 		}) { _ in
@@ -138,6 +148,10 @@ class DMSwipeCard: UIView {
 		}
 		self.delegate?.cardSwipedLeft(self)
 	}
+    
+    private func removeX() -> CGFloat {
+        return UIScreen.main.bounds.width * 2
+    }
 }
 
 extension DMSwipeCard: UIGestureRecognizerDelegate {
