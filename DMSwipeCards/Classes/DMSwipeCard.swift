@@ -24,7 +24,7 @@ class DMSwipeCard: UIView {
 
 	private let actionMargin: CGFloat = 120.0
 	private let rotationStrength: CGFloat = 320.0
-	private let rotationAngle: CGFloat = CGFloat(M_PI) / CGFloat(8.0)
+	private let rotationAngle: CGFloat = CGFloat.pi / 8
 	private let rotationMax: CGFloat = 1
 	private let scaleStrength: CGFloat = -2
 	private let scaleMax: CGFloat = 1.02
