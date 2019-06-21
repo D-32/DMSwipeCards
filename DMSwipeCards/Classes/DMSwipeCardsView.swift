@@ -86,15 +86,13 @@ public class DMSwipeCardsView<Element>: UIView {
 			}
 		}
 	}
-
+	
 	func swipeTopCardRight() {
-		// TODO: not yet supported
-		fatalError("Not yet supported")
+		self.loadedCards[0].rightAction()
 	}
 
 	func swipeTopCardLeft() {
-		// TODO: not yet supported
-		fatalError("Not yet supported")
+		self.loadedCards[0].leftAction()
 	}
 }
 
